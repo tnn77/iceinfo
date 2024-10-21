@@ -84,7 +84,7 @@ def main(day,zhr):
   print("\n plotting {}".format(str(dd)))
   ### set file name and title
   fout = os.path.join(out_dir,f"{dd:%Y%m%d%H%M}-{zhr}-sfc")
-  title =f"{day} {zhr}Z ECMWF Opendata atmosphere &\nat {dd: UTC %H:%M %d %b %Y}\nPlanned track {ver}."
+  title =f"{day} {zhr}Z ECMWF Opendata atmosphere at\n{dd: UTC %H:%M %d %b %Y}(planned track {ver})."
   ### get data
   # interpolated Shirase location
   pts += [xydata(x=lonfield(epoch([dd])),y=latfield(epoch([dd])),lab="Shirase loc",alpha=0.9,mec="0.9",style="$WQ$")]
