@@ -28,11 +28,11 @@ from iceinfo_libs.maplib import plotmercator,plotpolarstereo
 
 ### set gloabl paths and functions
 plot_iceinfo = "./test_fig"
-ECMWFDir = './sample'
+ECMWFDir = './sample_files'
 ver="ver20231201"
 
 def importTrack():
- trackf = f"./sample/planned_track_{ver}.csv"
+ trackf = f"./sample_files/planned_track_{ver}.csv"
  df = pd.read_csv(trackf)
  lon = [ float(x) for x in df["lon"] ]
  lat = [ float(x) for x in df["lat"] ]

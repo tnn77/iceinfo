@@ -8,7 +8,7 @@ readonly pyPath=~/miniconda3/envs/iceinfo_env/bin
 ### path to iceinfo scripts
 readonly pyScriptPath=/mnt/c/MEGAsync/progs/scripts/iceinfo/scripts
 ### path to the grib2 files
-readonly gribPath=${pyScriptPath}/sample
+readonly gribPath=${pyScriptPath}/sample_files
 readonly newFigPath=${pyScriptPath}/test_fig
 
 set -Eeuo pipefail
