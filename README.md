@@ -23,7 +23,7 @@ $bash do\_ecmwf.sh
 $bash do\_ecmwf.sh 20231205 00  (new figures are created in the test\_fig folder)   
 Note: right now, the grib files and figure outputs are contained in this directory for convenience (it might not be during JARE). 
 ### file managements
-This is obviously a preference, so this is just a comment.   
+This is obviously a preference, so this is just an FYI.    
 In the Thunderbird app, I used the FiltaQuilla add-on to automatically save attachments to a specific directory (new files).  
 After I do the new plots on the latest files, I moved the grib2 and converted NC files to an archive folder.  
 I used to rsync the archive figures folders with the Shirase shared directory, so the forecast figures can be uploaded to the NME intranet page.  
