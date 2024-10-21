@@ -17,7 +17,7 @@ Note: that some numpy dtype warning appeared when I tested from scratch, but it 
 ## workflow
 $bash do\_ecmwf.sh  
 -> calls grib\_to\_netcdf to convert grib2 files to the netCDF format.  
--> call "plotECMWF-LHB.py" to do the wind and pressure field fig, "plotECMWFWave-LHB.py" to do the wave field figure.  
+-> then, calls "plotECMWF-LHB.py" to do the wind and pressure field fig, "plotECMWFWave-LHB.py" to do the wave field figure.  
 ---> the main python code calls libraries from the iceinfo-libs folder. 
 ### example
 $bash do\_ecmwf.sh 20231205 00  
