@@ -4,7 +4,9 @@ from datetime import datetime as dt
 from netCDF4 import num2date, Dataset
 
 def epoch(d_in):
- """din is a datetime list."""
+ """
+ change datetime obj to epoch time, din is a datetime list.
+ """
  return [ (x-dt(1970,1,1)).total_seconds() for x in d_in ]
 
 def readNC(f_in,var=False,dims=False,longitude='longitude',latitude='latitude',time='time',fill_value=np.nan):
@@ -34,3 +36,24 @@ def readNC(f_in,var=False,dims=False,longitude='longitude',latitude='latitude',t
     return dtime,lon,lat,u
    else: return dtime,lon,lat
   else: return u
+
+def pol2orthg(r,th,convention='met'):
+ """
+ Converts meteorological/vector directions as polar coordinates (r,theta) to orthogonal components u,v
+ 
+ Parameters: 
+ r as magnitude, theta as direction, convention: 'met' by default with 'vector' as alternative.
+ 
+ Returns:
+ u,v 
+ """
+ offset = 270
+ if convention=='vector': offset = 90
+ #
+ if not isinstance(r,np.ndarray):
+  r  = np.array(r)
+  th = np.array(th)
+ ang_polar = (offset-th)%360
+ u = r*np.cos(np.deg2rad(ang_polar))
+ v = r*np.sin(np.deg2rad(ang_polar))
+ return u,v

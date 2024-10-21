@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-set -eu
 
+### Paths, some unnecessary.
 readonly scriptName=$(basename "${BASH_SOURCE[0]}")
 readonly scriptDir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
-readonly pyPath=/home/takka/miniconda3/envs/plt_env/bin
+### path to python interpretor 
+readonly pyPath=~/miniconda3/envs/iceinfo_env/bin
+### path to iceinfo scripts
 readonly pyScriptPath=/mnt/c/MEGAsync/progs/scripts/iceinfo/scripts
+### path to the grib2 files
 readonly gribPath=${pyScriptPath}/sample
 readonly newFigPath=${pyScriptPath}/test_fig
 
@@ -36,14 +39,17 @@ the arguments date and zhr are used to find the grib/nc files.
    zhr is either 00 or 12
 -h, --help      Print this help and exit
 -v, --verbose   Print script debug info usin -x
--f, --flag      flag whether to do grib2nc conversion, use -f NOT to do grib2nc 
-Note: loops through the flags but not capable to combine flags like -hv
+-f, --flag      flag whether to do grib2nc conversion, default is true, so use -f flag to skip grib2nc (useful when "old" grib files are moved to a different folder) 
+Note: loops through the flags but not capable to combine flags like -hv. 
+Note2: flags must come before the arguments. 
+Suggestion: could use flags to decide whether to do weather maps only or do waves etc.
 EOF
   exit
 }
 
 cleanup() {
   xcode=$?
+  echo "the exit code is ${xcode}."
   ### trap all and decide on cleanup action using exit code
   trap - SIGINT SIGTERM ERR EXIT
   ### script cleanup here
@@ -65,7 +71,11 @@ parse_args() {
     -h | --help) usage ;;
     -v | --verbose) set -x ;;
     -f | --flag) flag=0 ;; # whether to do grib2nc
-    # to add another, just repeat the below -p flag with different letter (need to shift for p) .
+    ### optional param example below, not used here. 
+    ##  -p | --param) # example named parameter
+    ##   param="${2-}"
+    ##   shift
+    ##   ;;
     -?*) bye "Unknown option: $1" ;;
     *) break ;;
     esac
@@ -82,7 +92,7 @@ parse_args() {
   return 0
 }
 
-### all args in sep strings
+### parse args 
 parse_args "$@"
 msg "- arguments: ${args[*]-}" # or ${args[@]}
 
@@ -93,12 +103,12 @@ then
 echo 'I do the grib'
   atm_f=${date}-${zhr}-sfc.grib2
   atm_nc=${atm_f%.grib2}.nc
-  #wave_f=${date}-${zhr}-wave.grib2
-  #wave_nc=./nc/${wave_f%.grib2}.nc
+  wave_f=${date}-${zhr}-wave.grib2
+  wave_nc=${wave_f%.grib2}.nc
   printf "\ngrib_to_netcdf sfc\n"
   ${pyPath}/grib_to_netcdf -o "${atm_nc}" "${atm_f}" 
-  # printf "\nnow waves\n\n"
-  # ${pyPath}/grib_to_netcdf -o ${wave_nc} ${wave_f} 
+  printf "\nnow waves\n\n"
+  ${pyPath}/grib_to_netcdf -o "${wave_nc}" "${wave_f}"
 else
 echo 'I dont do the grib'
 fi
@@ -106,7 +116,7 @@ fi
 cd ${pyScriptPath}
 printf "\ndo Python plot scripts.\n\n"
 ${pyPath}/python plotECMWF-LHB.py "${date}" "${zhr}"
-#${pyPath}/python ${pyScriptPath}/plotECMWFWave_LHB.py ${date} ${zhr}
+${pyPath}/python plotECMWFWave-LHB.py "${date}" "${zhr}"
 printf "\n"
 
 printf "\nrsync to the shared folder..\n\n"

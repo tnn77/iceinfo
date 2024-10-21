@@ -27,6 +27,7 @@ from iceinfo_libs.mapfunc import plotvector,plotcontour,plottracks,plotpoints,pl
 from iceinfo_libs.scale_bar import scale_bar 
 
 ################################################################################
+### optional arguments that can be updated
 # can add coast and land properties too.
 kwargs = dict(
    coastison=False,coastlw=4,coastlc='k',
@@ -50,11 +51,13 @@ def plotmapfig(
  title,fout,verbose,
  projection,circle=[],inset=False,scalebar=False,\
  ):
+ """takes various input data to plot"""
  f = plt.figure(figsize=figsize,dpi=dpi,facecolor=facecolor,edgecolor=edgecolor)
  ax = plt.subplot(1,1,1,projection=projection)
  _ = ax.set_extent(plt_extent, crs=ccrs.PlateCarree(central_longitude=central_longitude))
- ### do plots
+ ### do plot for each data
  if verbose: print('grid now')
+ ### if there are no gridded or scatter data to show in color, make a background map image.
  if not any([grd,scat]):  _ = ax.stock_img()
  if grd:
   pcm = ax.pcolormesh(grd.x,grd.y,grd.z,cmap=grd.cmap,\
@@ -130,7 +133,7 @@ def plotmapfig(
      _ = cbar.ax.tick_params(labelsize=int(fontsize*0.75)) #'large')
      _ = cbar.ax.minorticks_on()
  #
- ### draw a circle in axes coordinates
+ ### draw a circle in axes coordinates, used when showing Arctic/Antarctica in a circular shape.
  if circle: _ = ax.set_boundary(circle, transform=ax.transAxes)
  #
  _ = plt.title(title,fontsize=int(0.7*(fontsize)))
@@ -166,6 +169,7 @@ def plotmercator(txts=[],pts=[],trcks=[],grd=[],\
    title=None,fout = 'test',verbose=False,inset=False,scalebar=False,
    **kwargin):
  #
+ ### update kw options
  kwargs.update(kwargin)
  if scalebar:
   sclbar_args.update(scalebar)
@@ -186,7 +190,7 @@ def plotpolarstereo(txts=[],pts=[],trcks=[],grd=[],\
   title=None,fout = 'test',verbose=False,inset=False,scalebar=False,\
   inset_ts=False,
   **kwargin):
-
+ """used when high res data were available for Totten"""
  # update args (only if dict is provided for optional args.)
  kwargs.update(kwargin)
  if isinstance(scalebar,dict):
@@ -210,6 +214,7 @@ def plotps(txts=[],pts=[],trcks=[],grd=[],\
    lat_tiks = np.arange(50.,89.,5.),lon_tiks = np.arange(-180,181,15),
    title=None,fout = 'test',verbose=False,hem='n',UTM=[],
    **kwargin):
+ """used when Arctic or Antarctica is shown as a circular shape."""
  #
  kwargs.update(kwargin)
  ### draw a circle in axes coordinates

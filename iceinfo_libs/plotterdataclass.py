@@ -1,3 +1,6 @@
+"""
+various plotter data classes used to help feeding plot data into the plotter functions.
+"""
 from dataclasses import dataclass
 @dataclass
 class xydata:

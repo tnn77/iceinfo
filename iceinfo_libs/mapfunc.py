@@ -2,7 +2,7 @@
 Created on # Y/m/d
 
 @author:
-Notes:
+Notes: functions to be used from maplib.py
 """
 
 import numpy as np
