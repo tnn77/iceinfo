@@ -20,7 +20,7 @@ $bash do\_ecmwf.sh
 -> then, calls "plotECMWF-LHB.py" to do the wind and pressure field fig, "plotECMWFWave-LHB.py" to do the wave field figure.  
 ---> the main python code calls libraries from the iceinfo\_libs folder. 
 ### example
-$bash do\_ecmwf.sh 20231205 00  
+$bash do\_ecmwf.sh 20231205 00  (new figures are created in the test\_fig folder) 
 Note: right now, the grib files and figure outputs are contained in this directory for convenience (it might not be during JARE). 
 ### file managements
 This is obviously a preference, so this is just a comment.   
