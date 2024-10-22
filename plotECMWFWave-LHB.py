@@ -39,7 +39,7 @@ def importTrack():
  return lon,lat,df
 
 def importECMWFWave(day,zhr):
- nc_in=f"{ECMWFDir}/{day}-{zhr}-wave.nc"
+ nc_in=f"{ECMWFDir}/{day}-{zhr}-wav.nc"
  #
  dtime,lons,lats,h = readNC(nc_in,'swh',dims=True)
  t = readNC(nc_in,'pp1d')
@@ -63,8 +63,11 @@ def main(day,zhr):
  dtime,xw,yw,h,u,v = importECMWFWave(day,zhr)
  ### if current Shirase pos is interpolated and shown (only somewhat useful inbound and outbound).
  dtimeS = [ parse(x) for x in track["date"] ] 
- lonfield = interp1d(epoch(dtimeS),lon)
- latfield = interp1d(epoch(dtimeS),lat)
+ doWQ=True
+ if (dtime[0]>dtimeS[0]) or (dtime[-1]<dtimeS[-1]): doWQ=False
+ if doWQ:
+  lonfield = interp1d(epoch(dtimeS),lon)
+  latfield = interp1d(epoch(dtimeS),lat)
  ### colormaps for wave heights
  #cmap = mplcm.rainbow
  cmap = mplcm.turbo
@@ -93,7 +96,8 @@ def main(day,zhr):
   title =f"{day} {zhr}Z ECMWF Opendata wave at\n{dd: UTC %H:%M %d %b %Y} (planned track {ver})."
   ### get data
   # interpolated Shirase location
-  pts += [xydata(x=lonfield(epoch([dd])),y=latfield(epoch([dd])),lab="Shirase loc",alpha=0.9,mec="0.9",style="$WQ$")]
+  if doWQ:
+   pts += [xydata(x=lonfield(epoch([dd])),y=latfield(epoch([dd])),lab="Shirase loc",alpha=0.9,mec="0.9",style="$WQ$")]
   # wave height as pcolors
   grd = grddata(x=xw,y=yw,z=h[i0,:,:],cmap=cmap,vlim=vlim,\
    lab='Significant wave height (m)')

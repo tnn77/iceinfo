@@ -103,7 +103,7 @@ then
 echo 'I do the grib'
   atm_f=${date}-${zhr}-sfc.grib2
   atm_nc=${atm_f%.grib2}.nc
-  wave_f=${date}-${zhr}-wave.grib2
+  wave_f=${date}-${zhr}-wav.grib2
   wave_nc=${wave_f%.grib2}.nc
   printf "\ngrib_to_netcdf sfc\n"
   ${pyPath}/grib_to_netcdf -o "${atm_nc}" "${atm_f}" 

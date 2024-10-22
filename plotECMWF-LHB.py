@@ -60,10 +60,13 @@ def main(day,zhr):
  # 
  dtime,xw,yw,h,u,v = importECMWF(day,zhr)
  h = 1e-2*h
- dtimeS = [ parse(x) for x in track["date"] ] 
  ### if current Shirase pos is interpolated and shown (only somewhat useful inbound and outbound).
- lonfield = interp1d(epoch(dtimeS),lon)
- latfield = interp1d(epoch(dtimeS),lat)
+ dtimeS = [ parse(x) for x in track["date"] ] 
+ doWQ=True
+ if (dtime[0]>dtimeS[0]) or (dtime[-1]<dtimeS[-1]): doWQ=False
+ if doWQ:
+  lonfield = interp1d(epoch(dtimeS),lon)
+  latfield = interp1d(epoch(dtimeS),lat)
  ### set the mslp contour values (make it a big range, so it will complain when it can't create a contour line)
  cntrs = [ x for x in range(950,1101,5) ]
  ### loop through lead times using the iint intervals
@@ -87,7 +90,8 @@ def main(day,zhr):
   title =f"{day} {zhr}Z ECMWF Opendata atmosphere at\n{dd: UTC %H:%M %d %b %Y}(planned track {ver})."
   ### get data
   # interpolated Shirase location
-  pts += [xydata(x=lonfield(epoch([dd])),y=latfield(epoch([dd])),lab="Shirase loc",alpha=0.9,mec="0.9",style="$WQ$")]
+  if doWQ:
+   pts += [xydata(x=lonfield(epoch([dd])),y=latfield(epoch([dd])),lab="Shirase loc",alpha=0.9,mec="0.9",style="$WQ$")]
   # wind vectors, there is a way to scale vector lengths automatically, which might be better if the coverage is changed often
   vec = vecdata(x=xw,y=yw,u=u[i0,:,:],v=v[i0,:,:],\
     lab=(0.75,0.850,10,'10 ms$^{-1}$\nwind vector'),\
