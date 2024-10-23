@@ -12,7 +12,7 @@ The conda packages needed are:
 
 eccodes is the ECMWF grib tools, which includes the grib\_to\_netcdf command.  
 ### example
-$conda config --add channels conda-forge
+$conda config --add channels conda-forge  
 $conda env create -n iceinfo\_env -f iceinfo-env.yml  
 Note: that some numpy dtype warning appeared when I tested from scratch, but it did not affect the plotting.  
 ## workflow
